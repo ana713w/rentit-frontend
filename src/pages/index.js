@@ -1,5 +1,8 @@
 export { default as HomePage } from './home-page'
+export { default as ItemCreatePage } from './item-create-page'
 export { default as ItemDetailPage } from './item-detail-page'
+export { default as ItemEditPage } from './item-edit-page'
 export { default as LoginPage } from './login-page'
+export { default as MyItemsPage } from './my-items-page'
 export { default as ProfilePage } from './profile-page'
 export { default as RegisterPage } from './register-page'
