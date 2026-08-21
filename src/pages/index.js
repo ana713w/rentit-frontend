@@ -1,3 +1,4 @@
+export { default as FavoritesPage } from './favorites-page'
 export { default as HomePage } from './home-page'
 export { default as ItemCreatePage } from './item-create-page'
 export { default as ItemDetailPage } from './item-detail-page'

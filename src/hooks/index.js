@@ -1,4 +1,5 @@
 export { useFetch } from './use-fetch'
 export { useAction } from './use-action'
 export { useItem, usePrimaryImage } from './use-item'
+export { useFavorites } from './use-favorites'
 export { useAuthContext } from '../contexts/auth-context'
