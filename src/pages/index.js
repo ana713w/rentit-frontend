@@ -1,4 +1,5 @@
 export { default as AdminDisputesPage } from './admin-disputes-page'
+export { default as AdminPromotePage } from './admin-promote-page'
 export { default as FavoritesPage } from './favorites-page'
 export { default as HomePage } from './home-page'
 export { default as ItemCreatePage } from './item-create-page'
