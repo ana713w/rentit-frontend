@@ -45,6 +45,14 @@ export function formatDateTime(value) {
   return value ? dateTimeFormatter.format(new Date(value)) : '—'
 }
 
+// Distancia en km devuelta por GET /items?lat&lng → «a 350 m» / «a 2,4 km»
+export function formatDistance(km) {
+  if (km === null || km === undefined || km === '') return null
+  const value = Number(km)
+  if (value < 1) return `a ${Math.max(Math.round(value * 100) * 10, 10)} m`
+  return `a ${value.toLocaleString('es-ES', { maximumFractionDigits: value < 10 ? 1 : 0 })} km`
+}
+
 export function toISODate(date) {
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, '0')

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { usePrimaryImage } from '../../../hooks'
 import { getCategory } from '../../../lib/constants'
-import { formatPrice } from '../../../lib/format'
+import { formatDistance, formatPrice } from '../../../lib/format'
 import { Badge, Icon, ImagePlaceholder } from '../../ui'
 import FavoriteButton from '../favorite-button/favorite-button'
 
@@ -12,6 +12,7 @@ import FavoriteButton from '../favorite-button/favorite-button'
 function ItemCard({ item, actions }) {
   const imageUrl = usePrimaryImage(item.id)
   const category = getCategory(item.category)
+  const distance = formatDistance(item.distance_km)
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-card bg-surface shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover">
@@ -51,6 +52,12 @@ function ItemCard({ item, actions }) {
             <Icon name={category.icon} className="text-base text-primary" />
             <span className="truncate">{category.label}</span>
           </p>
+          {distance && (
+            <p className="flex items-center gap-1 text-xs font-semibold text-primary-strong sm:text-sm">
+              <Icon name="near_me" className="text-base" />
+              {distance}
+            </p>
+          )}
         </div>
       </Link>
       {actions && <div className="flex flex-wrap gap-2 px-3 pb-3 sm:px-4 sm:pb-4">{actions}</div>}

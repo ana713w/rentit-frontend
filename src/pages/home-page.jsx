@@ -1,20 +1,29 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useFetch } from '../hooks'
+import { useAuthContext } from '../contexts/auth-context'
 import { listItems } from '../services'
 import { getCategory } from '../lib/constants'
+import { getCurrentPosition } from '../lib/google-maps'
 import { CategoryPicker, ItemList } from '../components/items'
-import { AsyncContent, Button, Chip, EmptyState, Icon, Input } from '../components/ui'
+import { Alert, AsyncContent, Button, Chip, EmptyState, Icon, Input } from '../components/ui'
 
 const PAGE_SIZE = 12
+const RADIUS_OPTIONS = [1, 5, 10, 25]
+const DEFAULT_RADIUS_KM = 5
 
 const SORTS = {
+  nearest: {
+    label: 'Más cercanos',
+    compare: (a, b) => Number(a.distance_km) - Number(b.distance_km),
+    needsLocation: true,
+  },
   recent: { label: 'Más recientes', compare: (a, b) => new Date(b.created_at) - new Date(a.created_at) },
   cheap: { label: 'Precio más bajo', compare: (a, b) => Number(a.price_per_day) - Number(b.price_per_day) },
   expensive: { label: 'Precio más alto', compare: (a, b) => Number(b.price_per_day) - Number(a.price_per_day) },
 }
 
-// GET /items no admite filtros todavía: se busca y filtra en el cliente
+// GET /items solo filtra por cercanía (lat, lng, radiusKm): texto, categoría y precio se filtran en el cliente
 const normalize = (text) =>
   (text || '')
     .toLowerCase()
@@ -95,6 +104,48 @@ function SearchHero({ q, maxPrice, onSearch, onMaxPriceChange }) {
   )
 }
 
+// «Cerca de mí»: usa la ubicación guardada en el perfil y, si no hay, la del navegador
+function NearMeBar({ near, locating, error, onEnable, onDisable, onRadiusChange }) {
+  const origin = near?.source === 'profile' ? 'tu dirección' : 'tu ubicación actual'
+
+  return (
+    <section className="flex flex-col gap-3 rounded-card bg-surface p-4 shadow-card">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-strong">
+            <Icon name="near_me" className="text-xl" />
+          </span>
+          <div>
+            <h2 className="text-base font-bold">Cerca de ti</h2>
+            <p className="text-sm text-fg-muted">
+              {near
+                ? `Objetos a menos de ${near.radiusKm} km de ${origin}`
+                : 'Encuentra lo que necesitas sin desplazarte lejos.'}
+            </p>
+          </div>
+        </div>
+        {near ? (
+          <div className="flex flex-wrap items-center gap-2">
+            {RADIUS_OPTIONS.map((km) => (
+              <Chip key={km} active={near.radiusKm === km} onClick={() => onRadiusChange(km)}>
+                {km} km
+              </Chip>
+            ))}
+            <Button variant="ghost" size="sm" onClick={onDisable}>
+              Ver todos
+            </Button>
+          </div>
+        ) : (
+          <Button variant="secondary" icon="my_location" loading={locating} onClick={onEnable}>
+            Cerca de mí
+          </Button>
+        )}
+      </div>
+      <Alert error={error} />
+    </section>
+  )
+}
+
 function PromoBanner() {
   return (
     <section className="relative overflow-hidden rounded-card bg-gradient-to-r from-primary via-primary to-primary-strong p-6 text-on-primary shadow-raised md:p-8">
@@ -127,7 +178,15 @@ function PromoBanner() {
 }
 
 function HomePage() {
-  const { data: items, loading, error, reload } = useFetch(listItems, [])
+  const { user } = useAuthContext()
+  // near: { latitude, longitude, radiusKm, source: 'profile' | 'device' } o null para ver todos los objetos
+  const [near, setNear] = useState(null)
+  const [locating, setLocating] = useState(false)
+  const [locationError, setLocationError] = useState(null)
+  const { data: items, loading, error, reload } = useFetch(
+    () => listItems(near ? { lat: near.latitude, lng: near.longitude, radiusKm: near.radiusKm } : undefined),
+    [near],
+  )
   // Búsqueda y categoría van en la URL para que el buscador de la cabecera y el botón atrás funcionen
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
@@ -135,6 +194,31 @@ function HomePage() {
   const [maxPrice, setMaxPrice] = useState('')
   const [sort, setSort] = useState('recent')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+
+  const enableNearMe = async () => {
+    setLocationError(null)
+    if (user?.latitude != null && user?.longitude != null) {
+      const coords = { latitude: Number(user.latitude), longitude: Number(user.longitude) }
+      setNear({ ...coords, radiusKm: DEFAULT_RADIUS_KM, source: 'profile' })
+      setSort('nearest')
+      return
+    }
+    setLocating(true)
+    try {
+      const coords = await getCurrentPosition()
+      setNear({ ...coords, radiusKm: DEFAULT_RADIUS_KM, source: 'device' })
+      setSort('nearest')
+    } catch (err) {
+      setLocationError(err)
+    } finally {
+      setLocating(false)
+    }
+  }
+
+  const disableNearMe = () => {
+    setNear(null)
+    if (sort === 'nearest') setSort('recent')
+  }
 
   const setParam = (key, value) => {
     const next = new URLSearchParams(searchParams)
@@ -144,9 +228,14 @@ function HomePage() {
     setVisibleCount(PAGE_SIZE)
   }
 
-  const filtered = (items || []).filter((item) => matches(item, { q, category, maxPrice })).sort(SORTS[sort].compare)
+  const sorts = Object.entries(SORTS).filter(([, config]) => !config.needsLocation || near)
+  const activeSort = SORTS[sort].needsLocation && !near ? 'recent' : sort
+  const filtered = (items || [])
+    .filter((item) => matches(item, { q, category, maxPrice }))
+    .sort(SORTS[activeSort].compare)
   const visible = filtered.slice(0, visibleCount)
-  const hasFilters = Boolean(q || category || maxPrice)
+  const hasFilters = Boolean(q || category || maxPrice || near)
+  const onlyNear = near && !q && !category && !maxPrice
 
   return (
     <div className="flex flex-col gap-8">
@@ -163,6 +252,15 @@ function HomePage() {
         <CategoryPicker value={category} onChange={(value) => setParam('category', value)} />
       </section>
 
+      <NearMeBar
+        near={near}
+        locating={locating}
+        error={locationError}
+        onEnable={enableNearMe}
+        onDisable={disableNearMe}
+        onRadiusChange={(radiusKm) => setNear((current) => ({ ...current, radiusKm }))}
+      />
+
       <PromoBanner />
 
       <section className="flex flex-col gap-4">
@@ -170,7 +268,7 @@ function HomePage() {
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-2xl font-extrabold sm:text-3xl">
-                {category ? getCategory(category).label : q ? 'Resultados' : 'Disponibles para alquilar'}
+                {category ? getCategory(category).label : q ? 'Resultados' : near ? 'Cerca de ti' : 'Disponibles para alquilar'}
               </h2>
               {items && (
                 <span className="rounded-control bg-primary-soft px-2 py-0.5 text-xs font-bold text-primary-strong">
@@ -183,8 +281,8 @@ function HomePage() {
             </p>
           </div>
           <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none md:mx-0 md:px-0">
-            {Object.entries(SORTS).map(([id, config]) => (
-              <Chip key={id} active={sort === id} onClick={() => setSort(id)}>
+            {sorts.map(([id, config]) => (
+              <Chip key={id} active={activeSort === id} onClick={() => setSort(id)}>
                 {config.label}
               </Chip>
             ))}
@@ -201,13 +299,20 @@ function HomePage() {
             <EmptyState
               icon={hasFilters ? 'search_off' : 'inventory_2'}
               title={hasFilters ? 'Sin resultados' : 'Todavía no hay objetos'}
-              description={hasFilters ? 'Prueba con otra búsqueda o quita los filtros.' : 'Sé el primero en publicar algo que no uses.'}
+              description={
+                onlyNear
+                  ? `No hay objetos a menos de ${near.radiusKm} km. Prueba con un radio mayor.`
+                  : hasFilters
+                    ? 'Prueba con otra búsqueda o quita los filtros.'
+                    : 'Sé el primero en publicar algo que no uses.'
+              }
               action={
                 hasFilters ? (
                   <Button
                     variant="secondary"
                     onClick={() => {
                       setMaxPrice('')
+                      disableNearMe()
                       setSearchParams({})
                     }}
                   >

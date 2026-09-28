@@ -1,7 +1,8 @@
 import { http } from '../lib/api'
 
 // Objetos
-export const listItems = () => http.get('/items')
+// params opcionales { lat, lng, radiusKm }: búsqueda por cercanía (devuelve distance_km)
+export const listItems = (params) => http.get('/items', { params })
 export const getItem = (id) => http.get(`/items/${id}`)
 export const createItem = (item) => http.post('/items', item)
 export const updateItem = (id, item) => http.patch(`/items/${id}`, item)
