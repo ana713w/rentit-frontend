@@ -12,6 +12,15 @@ npm install
 npm run dev                # http://localhost:5173 (proxy /api → http://localhost:3000)
 ```
 
+Variables de `.env`:
+
+| Variable | Para qué sirve |
+| --- | --- |
+| `VITE_API_URL` | Base de la API (`/api/v1` detrás de Caddy en producción) |
+| `VITE_STRIPE_PUBLISHABLE_KEY` | Clave publicable de Stripe para el pago con tarjeta |
+| `VITE_GOOGLE_MAPS_API_KEY` | Autocompletado de direcciones y geocodificación inversa. Activa *Maps JavaScript API*, *Places API (New)* y *Geocoding API* y restringe la clave a tus dominios. Opcional: sin ella la dirección se escribe a mano |
+| `VITE_MAX_RENTAL_DAYS` | Duración máxima de un alquiler (6 por defecto, igual que el backend) |
+
 El backend tiene que estar en `http://localhost:3000`. Para que los pagos cambien de estado en local:
 `stripe listen --forward-to localhost:3000/api/v1/payments/webhook`.
 

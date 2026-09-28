@@ -10,12 +10,17 @@ export function itemToFormValues(item) {
   }
 }
 
+const toCoord = (value) => (value === null || value === undefined || value === '' ? null : Number(value))
+
 export function userToFormValues(user) {
   return {
     fullName: user?.full_name ?? '',
     phone: user?.phone ?? '',
-    address: user?.address ?? '',
-    latitude: user?.latitude ?? '',
-    longitude: user?.longitude ?? '',
+    // Dirección + coordenadas (ocultas) que rellena AddressField
+    location: {
+      address: user?.address ?? '',
+      latitude: toCoord(user?.latitude),
+      longitude: toCoord(user?.longitude),
+    },
   }
 }

@@ -1,47 +1,27 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useAuthContext } from '../../../contexts/auth-context'
 import { updateMe } from '../../../services'
 import { userToFormValues } from '../../../lib/mappers'
 import { applyServerErrors, rules } from '../../../lib/form-errors'
-import { Alert, Button, Input } from '../../ui'
+import { AddressField, Alert, Button, Input } from '../../ui'
 
-const optionalNumber = (value) => (value === '' || value === null ? undefined : Number(value))
+const LOCATION_FIELDS = ['address', 'latitude', 'longitude']
 
 // Datos del usuario y su dirección (donde se recogen y devuelven sus objetos) → PATCH /auth/me
 function ProfileForm({ onSuccess }) {
   const { user, refresh } = useAuthContext()
   const [serverError, setServerError] = useState(null)
   const [saved, setSaved] = useState(false)
-  const [locating, setLocating] = useState(false)
   const {
     register,
     handleSubmit,
     setError,
-    setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({ defaultValues: userToFormValues(user) })
 
-  const fillMyLocation = () => {
-    if (!navigator.geolocation) {
-      setServerError({ message: 'Tu navegador no permite obtener la ubicación.' })
-      return
-    }
-    setLocating(true)
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setValue('latitude', Number(coords.latitude.toFixed(6)), { shouldDirty: true })
-        setValue('longitude', Number(coords.longitude.toFixed(6)), { shouldDirty: true })
-        setLocating(false)
-      },
-      () => {
-        setServerError({ message: 'No se pudo obtener tu ubicación. Revisa los permisos del navegador.' })
-        setLocating(false)
-      },
-    )
-  }
-
-  const onSubmit = async ({ fullName, phone, address, latitude, longitude }) => {
+  const onSubmit = async ({ fullName, phone, location }) => {
     setServerError(null)
     setSaved(false)
     try {
@@ -49,16 +29,17 @@ function ProfileForm({ onSuccess }) {
       await updateMe({
         fullName: fullName.trim(),
         phone: phone.trim(),
-        ...(address.trim() ? { address: address.trim() } : {}),
-        ...(latitude !== undefined ? { latitude } : {}),
-        ...(longitude !== undefined ? { longitude } : {}),
+        ...(location.address.trim() ? { address: location.address.trim() } : {}),
+        ...(location.latitude != null ? { latitude: location.latitude, longitude: location.longitude } : {}),
       })
       // PATCH /auth/me no devuelve isAdmin: recargamos la sesión completa
       const me = await refresh()
       setSaved(true)
       onSuccess?.(me)
     } catch (error) {
-      if (!applyServerErrors(error, setError)) setServerError(error)
+      if (!applyServerErrors(error, (field, err) => setError(LOCATION_FIELDS.includes(field) ? 'location' : field, err))) {
+        setServerError(error)
+      }
     }
   }
 
@@ -79,48 +60,25 @@ function ProfileForm({ onSuccess }) {
           label="Teléfono"
           type="tel"
           autoComplete="tel"
+          hint="Se comparte con la otra parte cuando se acepta una reserva."
           error={errors.phone?.message}
           {...register('phone', { maxLength: { value: 30, message: 'Máximo 30 caracteres' } })}
         />
       </div>
 
-      <Input
-        label="Dirección de recogida"
-        autoComplete="street-address"
-        placeholder="Calle, número y ciudad"
-        hint="Donde se recogen y devuelven tus objetos. Es obligatoria para publicar."
-        error={errors.address?.message}
-        {...register('address', {
-          validate: (value) => !value.trim() || value.trim().length >= 5 || 'Mínimo 5 caracteres',
-          maxLength: { value: 255, message: 'Máximo 255 caracteres' },
-        })}
+      <Controller
+        name="location"
+        control={control}
+        rules={{ validate: rules.address }}
+        render={({ field, fieldState }) => (
+          <AddressField
+            label="Dirección de recogida"
+            hint="Donde se recogen y devuelven tus objetos. Es obligatoria para publicar."
+            error={fieldState.error?.message}
+            {...field}
+          />
+        )}
       />
-
-      <div className="grid items-end gap-4 sm:grid-cols-[1fr_1fr_auto]">
-        <Input
-          label="Latitud"
-          type="number"
-          step="any"
-          error={errors.latitude?.message}
-          {...register('latitude', {
-            setValueAs: optionalNumber,
-            validate: (value) => value === undefined || (value >= -90 && value <= 90) || 'Entre -90 y 90',
-          })}
-        />
-        <Input
-          label="Longitud"
-          type="number"
-          step="any"
-          error={errors.longitude?.message}
-          {...register('longitude', {
-            setValueAs: optionalNumber,
-            validate: (value) => value === undefined || (value >= -180 && value <= 180) || 'Entre -180 y 180',
-          })}
-        />
-        <Button variant="soft" icon="my_location" onClick={fillMyLocation} loading={locating}>
-          Usar mi ubicación
-        </Button>
-      </div>
 
       <Alert error={serverError} />
       {saved && !serverError && <Alert tone="success">Perfil actualizado</Alert>}

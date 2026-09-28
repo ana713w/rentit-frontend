@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useAuthContext } from '../../../contexts/auth-context'
 import { register as registerRequest } from '../../../services'
 import { applyServerErrors, rules } from '../../../lib/form-errors'
-import { Alert, Button, Input } from '../../ui'
+import { AddressField, Alert, Button, Input } from '../../ui'
+
+const LOCATION_FIELDS = ['address', 'latitude', 'longitude']
 
 function RegisterForm({ onSuccess }) {
   const { login } = useAuthContext()
@@ -12,17 +14,27 @@ function RegisterForm({ onSuccess }) {
     register,
     handleSubmit,
     setError,
+    control,
     formState: { errors, isSubmitting },
-  } = useForm({ defaultValues: { fullName: '', email: '', phone: '', address: '', password: '' } })
+  } = useForm({
+    defaultValues: {
+      fullName: '',
+      email: '',
+      phone: '',
+      location: { address: '', latitude: null, longitude: null },
+      password: '',
+    },
+  })
 
-  const onSubmit = async ({ phone, address, ...data }) => {
+  const onSubmit = async ({ phone, location, ...data }) => {
     setServerError(null)
     try {
       // Los opcionales vacíos no se envían (la API valida longitud mínima si llegan)
       await registerRequest({
         ...data,
         ...(phone ? { phone } : {}),
-        ...(address.trim() ? { address: address.trim() } : {}),
+        ...(location.address.trim() ? { address: location.address.trim() } : {}),
+        ...(location.latitude != null ? { latitude: location.latitude, longitude: location.longitude } : {}),
       })
       // El registro no inicia sesión: hacemos login con los mismos datos
       const user = await login({ email: data.email, password: data.password })
@@ -30,7 +42,7 @@ function RegisterForm({ onSuccess }) {
     } catch (error) {
       if (error.status === 409) {
         setError('email', { message: 'Ya existe una cuenta con este email' })
-      } else if (!applyServerErrors(error, setError)) {
+      } else if (!applyServerErrors(error, (field, err) => setError(LOCATION_FIELDS.includes(field) ? 'location' : field, err))) {
         setServerError(error)
       }
     }
@@ -63,16 +75,18 @@ function RegisterForm({ onSuccess }) {
         error={errors.phone?.message}
         {...register('phone', { maxLength: { value: 30, message: 'Máximo 30 caracteres' } })}
       />
-      <Input
-        label="Dirección"
-        autoComplete="street-address"
-        placeholder="Calle, número y ciudad"
-        hint="Opcional. Es donde se recogen tus objetos; la necesitas para publicar."
-        error={errors.address?.message}
-        {...register('address', {
-          validate: (value) => !value.trim() || value.trim().length >= 5 || 'Mínimo 5 caracteres',
-          maxLength: { value: 255, message: 'Máximo 255 caracteres' },
-        })}
+      <Controller
+        name="location"
+        control={control}
+        rules={{ validate: rules.address }}
+        render={({ field, fieldState }) => (
+          <AddressField
+            label="Dirección"
+            hint="Opcional. Es donde se recogen tus objetos; la necesitas para publicar."
+            error={fieldState.error?.message}
+            {...field}
+          />
+        )}
       />
       <Input
         label="Contraseña"
