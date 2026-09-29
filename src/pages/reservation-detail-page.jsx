@@ -4,7 +4,7 @@ import { useAuthContext, useFetch, useItem, usePrimaryImage } from '../hooks'
 import { getReservation } from '../services'
 import { RESERVATION_ROLES, RESERVATION_STATUS } from '../lib/constants'
 import { countNights, formatCurrency, formatDate } from '../lib/format'
-import { ReservationActions, ReservationTimeline } from '../components/reservations'
+import { ContactCard, ReservationActions, ReservationTimeline } from '../components/reservations'
 import { PaymentSection } from '../components/payments'
 import { ContractsSection } from '../components/contracts'
 import { VerificationsSection } from '../components/verifications'
@@ -95,6 +95,8 @@ function ReservationDetailPage() {
             {hint && <Alert tone="info">{hint}</Alert>}
 
             <ReservationSummary reservation={r} item={item} role={role} />
+
+            {r.counterpart && <ContactCard counterpart={r.counterpart} />}
 
             {active && (
               <>

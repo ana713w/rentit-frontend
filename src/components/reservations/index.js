@@ -1,3 +1,4 @@
+export { default as ContactCard } from './contact-card/contact-card'
 export { default as ReservationActions } from './reservation-actions/reservation-actions'
 export { default as ReservationCard } from './reservation-card/reservation-card'
 export { default as ReservationList } from './reservation-list/reservation-list'
