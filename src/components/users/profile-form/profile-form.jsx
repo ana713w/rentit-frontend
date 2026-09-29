@@ -30,7 +30,9 @@ function ProfileForm({ onSuccess }) {
         fullName: fullName.trim(),
         phone: phone.trim(),
         ...(location.address.trim() ? { address: location.address.trim() } : {}),
-        ...(location.latitude != null ? { latitude: location.latitude, longitude: location.longitude } : {}),
+        // Sin coordenadas (dirección escrita a mano) se borran las anteriores para no dejar una ubicación obsoleta
+        latitude: location.latitude ?? null,
+        longitude: location.longitude ?? null,
       })
       // PATCH /auth/me no devuelve isAdmin: recargamos la sesión completa
       const me = await refresh()
