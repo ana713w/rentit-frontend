@@ -77,3 +77,7 @@ export const UPLOAD_LIMITS = {
   maxFiles: 10,
   maxSizeMB: 5,
 }
+
+// La fianza se retiene con una preautorización de Stripe, que caduca a los ~7 días:
+// el alquiler no puede durar más (debe coincidir con MAX_RENTAL_DAYS del backend)
+export const MAX_RENTAL_DAYS = Number(import.meta.env.VITE_MAX_RENTAL_DAYS || 6)

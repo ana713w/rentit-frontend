@@ -5,6 +5,7 @@ import { useAuthContext } from '../../../contexts/auth-context'
 import { createReservation } from '../../../services'
 import { countNights, formatCurrency, rangesOverlap, toISODate } from '../../../lib/format'
 import { applyServerErrors } from '../../../lib/form-errors'
+import { MAX_RENTAL_DAYS } from '../../../lib/constants'
 import { Alert, Button, DateRangeFields } from '../../ui'
 
 /**
@@ -31,6 +32,7 @@ function ReservationRequestForm({ item, blockedDates = [], onDatesChange }) {
   const nights = endDate > startDate ? countNights(startDate, endDate) : 0
   const pricePerDay = Number(item.price_per_day)
   const overlapsBlocked = nights > 0 && blockedDates.some((b) => rangesOverlap(startDate, endDate, b.start_date, b.end_date))
+  const tooLong = nights > MAX_RENTAL_DAYS
 
   const isOwner = user?.id === item.owner_id
 
@@ -88,12 +90,26 @@ function ReservationRequestForm({ item, blockedDates = [], onDatesChange }) {
       )}
 
       {overlapsBlocked && <Alert tone="warning">Las fechas elegidas incluyen días no disponibles.</Alert>}
+      {tooLong && (
+        <Alert tone="warning">
+          Un alquiler puede durar como máximo {MAX_RENTAL_DAYS} días: la fianza solo se puede retener durante una semana.
+        </Alert>
+      )}
       <Alert error={serverError} />
 
-      <Button type="submit" size="lg" icon="send" loading={isSubmitting} disabled={overlapsBlocked} fullWidth>
+      <Button
+        type="submit"
+        size="lg"
+        icon="send"
+        loading={isSubmitting}
+        disabled={overlapsBlocked || tooLong}
+        fullWidth
+      >
         Solicitar alquiler
       </Button>
-      <p className="text-center text-xs text-fg-muted">No se cobra nada hasta que el propietario acepte.</p>
+      <p className="text-center text-xs text-fg-muted">
+        No se cobra nada hasta que el propietario acepte. Máximo {MAX_RENTAL_DAYS} días por alquiler.
+      </p>
     </form>
   )
 }
