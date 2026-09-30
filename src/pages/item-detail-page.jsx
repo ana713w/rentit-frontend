@@ -120,7 +120,7 @@ function ItemDetailPage() {
               </aside>
             </div>
 
-            {/* Barra fija de acción en móvil (encima de la barra de pestañas) */}
+            {/* Barra de accion en movil */}
             {it.is_active && !isOwner && <div aria-hidden="true" className="h-16 lg:hidden" />}
             {it.is_active && !isOwner && (
               <div className="fixed inset-x-0 bottom-[4.5rem] z-20 md:bottom-0 flex items-center justify-between gap-3 bg-surface px-4 py-3 shadow-[0_-4px_20px_-2px_rgb(0_0_0/0.08)] lg:hidden">

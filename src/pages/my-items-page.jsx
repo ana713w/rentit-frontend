@@ -8,7 +8,7 @@ function MyItemsPage() {
   const { user } = useAuthContext()
   const { data: items, loading, error, reload } = useFetch(listItems, [])
 
-  // No hay endpoint de "mis objetos": filtramos por owner_id (GET /items solo trae los activos)
+  // filtra por owner_id
   const mine = (items || []).filter((item) => item.owner_id === user.id)
 
   return (

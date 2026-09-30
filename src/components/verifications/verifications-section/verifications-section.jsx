@@ -4,10 +4,7 @@ import { VERIFICATION_TYPES } from '../../../lib/constants'
 import { Alert, AsyncContent, Button, Card, ConfirmButton } from '../../ui'
 import VerificationCard from '../verification-card/verification-card'
 
-/**
- * Check-in y check-out de una reserva. Crear el check-out completa la reserva,
- * por eso avisa al padre con onReservationChange para que la recargue.
- */
+// Check-in y check-out, el check-out completa la reserva
 function VerificationsSection({ reservationId, userId, onReservationChange, onChange }) {
   const { data: verifications, loading, error, reload } = useFetch(
     () => listVerifications(reservationId),

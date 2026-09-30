@@ -5,7 +5,7 @@ import { itemToFormValues } from '../lib/mappers'
 import { BlockedDatesManager, ItemForm, ItemImagesManager } from '../components/items'
 import { AsyncContent, Button, Card, ConfirmButton, PageHeader } from '../components/ui'
 
-// Gestión completa de un objeto: datos, fotos, fechas bloqueadas y desactivar
+// Gestion completa del objeto
 function ItemEditPage() {
   const { id } = useParams()
   const { user } = useAuthContext()

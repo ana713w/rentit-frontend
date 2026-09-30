@@ -20,7 +20,7 @@ const TABS = {
 }
 
 function ReservationsPage() {
-  // La pestaña va en la URL (?as=owner) para poder enlazarla
+  // tab en la URL (?as=owner)
   const [searchParams, setSearchParams] = useSearchParams()
   const tab = searchParams.get('as') === 'owner' ? 'owner' : 'guest'
   const { data: reservations, loading, error, reload } = useFetch(TABS[tab].fetcher, [tab])

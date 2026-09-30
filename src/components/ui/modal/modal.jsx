@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-/**
- * Modal accesible basado en <dialog> (Escape y foco los gestiona el navegador).
- *   <Modal open={open} onClose={() => setOpen(false)} title="..." footer={<Button />}>...</Modal>
- */
+// Modal basado en <dialog>
 function Modal({ open, onClose, title, footer, children }) {
   const dialogRef = useRef(null)
 

@@ -28,14 +28,14 @@ function App() {
     <PageLayout>
       <ScrollToTop />
       <Routes>
-        {/* Públicas */}
+        {/* Publicas */}
         <Route path="/" element={<HomePage />} />
         <Route path="/items/:id" element={<ItemDetailPage />} />
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
         <Route path="/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
 
-        {/* Con sesión */}
+        {/* Con sesion */}
         <Route path="/items/new" element={privateRoute(<ItemCreatePage />)} />
         <Route path="/items/:id/edit" element={privateRoute(<ItemEditPage />)} />
         <Route path="/my-items" element={privateRoute(<MyItemsPage />)} />

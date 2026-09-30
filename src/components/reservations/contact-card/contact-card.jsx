@@ -11,10 +11,7 @@ const SUBTITLES = {
   guest: 'Queda con el arrendatario para la entrega (check-in) y la devolución (check-out).',
 }
 
-/**
- * Datos de la otra parte de la reserva. La API solo los devuelve (reservation.counterpart)
- * cuando la reserva está confirmada o completada.
- */
+// Contacto de la otra parte (reservas confirmadas o completadas)
 function ContactCard({ counterpart }) {
   const { role, fullName, email, phone, pickupAddress } = counterpart
 

@@ -20,7 +20,7 @@ export function getCategory(value) {
   )
 }
 
-// Navegación principal (cabecera en escritorio y barra inferior en móvil)
+// Navegacion principal
 export const NAV_LINKS = [
   { to: '/', label: 'Inicio', icon: 'home', end: true },
   { to: '/favorites', label: 'Favoritos', icon: 'favorite' },
@@ -78,6 +78,5 @@ export const UPLOAD_LIMITS = {
   maxSizeMB: 5,
 }
 
-// La fianza se retiene con una preautorización de Stripe, que caduca a los ~7 días:
-// el alquiler no puede durar más (debe coincidir con MAX_RENTAL_DAYS del backend)
+// Maximo de dias por la preautorizacion de Stripe (~7 dias)
 export const MAX_RENTAL_DAYS = Number(import.meta.env.VITE_MAX_RENTAL_DAYS || 6)

@@ -2,7 +2,7 @@ import { DEPOSIT_STATUS, RENT_STATUS } from '../../../lib/constants'
 import { formatCurrency } from '../../../lib/format'
 import { DetailList, StatusBadge } from '../../ui'
 
-// Resumen de un pago: importes y estados del alquiler y del depósito
+// Resumen de importes y estados
 function PaymentSummary({ payment, showPlatformFee = false }) {
   const captured = Number(payment.deposit_captured_amount || 0)
 

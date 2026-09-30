@@ -2,7 +2,7 @@ import { useAction, useFetch } from '../../../hooks'
 import { deleteItemImage, listItemImages, setPrimaryImage, uploadItemImages } from '../../../services'
 import { Alert, AsyncContent, Badge, Button, Card, ConfirmButton, EmptyState, FileUploader, PhotoGrid } from '../../ui'
 
-// Gestión de fotos de un objeto (solo dueño): subir, marcar principal y borrar
+// Fotos del objeto (solo dueño)
 function ItemImagesManager({ itemId }) {
   const { data: images, loading, error, reload } = useFetch(() => listItemImages(itemId), [itemId])
 

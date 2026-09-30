@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-/**
- * Carga datos al montar y cada vez que cambian las dependencias.
- *
- *   const { data, loading, error, reload, mutate } = useFetch(() => getProperty(id), [id])
- *
- * - reload() vuelve a pedir los datos sin vaciar los actuales (sin parpadeo).
- * - mutate(updater) modifica los datos en local, p. ej. tras borrar un elemento.
- * - Si cambian las dependencias, los datos anteriores se descartan.
- */
+// Carga datos segun dependencias, con reload y mutate
 export function useFetch(fetcher, deps = []) {
   const [reloadCount, setReloadCount] = useState(0)
   const [result, setResult] = useState({ depsKey: null, requestKey: null, data: null, error: null })
@@ -26,7 +18,7 @@ export function useFetch(fetcher, deps = []) {
     return () => {
       active = false
     }
-    // fetcher cambia en cada render: solo relanzamos cuando cambian las dependencias o se pide un reload
+    // solo relanza al cambiar deps o con reload
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestKey])
 

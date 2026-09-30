@@ -1,10 +1,6 @@
 import Input from './input'
 
-/**
- * Par de fechas inicio/fin para react-hook-form, con la regla "fin posterior a inicio".
- *   <DateRangeFields register={register} errors={errors} min={today} />
- * Los campos se llaman startDate y endDate (como espera la API).
- */
+// Fechas de inicio y fin, fin posterior a inicio
 function DateRangeFields({ register, errors, min, startLabel = 'Desde', endLabel = 'Hasta', disabled }) {
   return (
     <div className="grid grid-cols-2 gap-3">

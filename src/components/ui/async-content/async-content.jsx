@@ -2,16 +2,7 @@ import Alert from '../alert/alert'
 import Button from '../button/button'
 import Spinner from '../spinner/spinner'
 
-/**
- * Resuelve los tres estados típicos de una carga con useFetch.
- *
- *   <AsyncContent loading={loading} error={error} data={data} onRetry={reload}
- *                 isEmpty={!data?.length} empty={<EmptyState title="Nada aquí" />}>
- *     {(items) => <List items={items} />}
- *   </AsyncContent>
- *
- * Mientras recarga con datos ya pintados, no muestra el spinner (sin parpadeo).
- */
+// Estados de carga, error y vacio para useFetch
 function AsyncContent({ loading, error, data, onRetry, isEmpty = false, empty = null, children }) {
   if (loading && !data) {
     return (

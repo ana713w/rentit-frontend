@@ -8,11 +8,7 @@ const TONES = {
   danger: { classes: 'bg-danger-soft text-danger', icon: 'error' },
 }
 
-/**
- * Mensaje destacado.
- *   <Alert tone="success">Guardado</Alert>
- *   <Alert error={error} />   → muestra error.message con tono danger
- */
+// Mensaje destacado, acepta un error
 function Alert({ tone = 'info', title, error, action, className, children }) {
   const finalTone = TONES[error ? 'danger' : tone]
   const content = children || error?.message

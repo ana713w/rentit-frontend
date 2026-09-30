@@ -3,12 +3,12 @@ import { listItems } from '../services'
 import { ItemList } from '../components/items'
 import { AsyncContent, Button, EmptyState, PageHeader } from '../components/ui'
 
-// Favoritos guardados en este navegador (la API no tiene favoritos)
+// Favoritos del navegador
 function FavoritesPage() {
   const { ids } = useFavorites()
   const { data: items, loading, error, reload } = useFetch(listItems, [])
 
-  // En el orden en que se marcaron; los objetos retirados desaparecen solos
+  // en orden de marcado
   const favorites = ids.map((id) => (items || []).find((item) => item.id === id)).filter(Boolean)
 
   return (

@@ -5,7 +5,7 @@ import { Card, Icon } from '../../ui'
 
 const FINAL_DEPOSIT_STATUSES = ['released', 'captured', 'canceled']
 
-// El pago devuelve 404 mientras no exista: no es un error para la línea de tiempo
+// 404 en el pago no es un error
 const fetchProgress = async (reservationId) => {
   const [contracts, payment, verifications] = await Promise.all([
     listContracts(reservationId).catch(() => []),
@@ -15,7 +15,7 @@ const fetchProgress = async (reservationId) => {
   return { contracts, payment, verifications }
 }
 
-// Pasos de la reserva a partir de su estado, contratos, pago y verificaciones
+// Pasos segun estado, contratos, pago y verificaciones
 function buildSteps(reservation, { contracts, payment, verifications }) {
   const rental = contracts.find((contract) => contract.contract_type === 'rental')
   const has = (type) => verifications.some((verification) => verification.verification_type === type)
@@ -36,10 +36,7 @@ function buildSteps(reservation, { contracts, payment, verifications }) {
   ]
 }
 
-/**
- * Solicitada → Aceptada → Contrato firmado → Pagada → Check-in → Check-out → Finalizada.
- * refreshKey: el padre lo incrementa cuando una sección cambia algo, para recalcular.
- */
+// Linea de tiempo, refreshKey fuerza el recalculo
 function ReservationTimeline({ reservation, refreshKey = 0 }) {
   const { data } = useFetch(() => fetchProgress(reservation.id), [reservation.id, reservation.status, refreshKey])
 

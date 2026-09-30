@@ -2,7 +2,7 @@ import { useFavorites } from '../../../hooks'
 import { cn } from '../../../lib/cn'
 import { Icon } from '../../ui'
 
-// Corazón sobre la foto. Los favoritos se guardan en este navegador (hooks/use-favorites).
+// Boton de favorito sobre la foto
 function FavoriteButton({ itemId, className }) {
   const { isFavorite, toggle } = useFavorites()
   const active = isFavorite(itemId)
@@ -13,7 +13,7 @@ function FavoriteButton({ itemId, className }) {
       aria-label={active ? 'Quitar de favoritos' : 'Añadir a favoritos'}
       aria-pressed={active}
       onClick={(event) => {
-        // La tarjeta entera es un enlace: que el clic no navegue
+        // evita navegar al hacer clic
         event.preventDefault()
         event.stopPropagation()
         toggle(itemId)

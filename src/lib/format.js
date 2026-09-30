@@ -45,7 +45,7 @@ export function formatDateTime(value) {
   return value ? dateTimeFormatter.format(new Date(value)) : '—'
 }
 
-// Distancia en km devuelta por GET /items?lat&lng → «a 350 m» / «a 2,4 km»
+// Distancia en m o km
 export function formatDistance(km) {
   if (km === null || km === undefined || km === '') return null
   const value = Number(km)

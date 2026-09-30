@@ -14,7 +14,7 @@ const navLinkClasses = ({ isActive }) =>
     isActive ? 'font-bold text-primary-strong' : 'font-semibold text-fg-muted hover:text-fg',
   )
 
-// Buscador compacto de la cabecera: lleva a la Home con ?q=
+// Buscador de la cabecera
 function HeaderSearch() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()

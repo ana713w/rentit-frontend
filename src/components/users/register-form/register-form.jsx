@@ -29,14 +29,14 @@ function RegisterForm({ onSuccess }) {
   const onSubmit = async ({ phone, location, ...data }) => {
     setServerError(null)
     try {
-      // Los opcionales vacíos no se envían (la API valida longitud mínima si llegan)
+      // los opcionales vacios no se envian
       await registerRequest({
         ...data,
         ...(phone ? { phone } : {}),
         ...(location.address.trim() ? { address: location.address.trim() } : {}),
         ...(location.latitude != null ? { latitude: location.latitude, longitude: location.longitude } : {}),
       })
-      // El registro no inicia sesión: hacemos login con los mismos datos
+      // login tras el registro
       const user = await login({ email: data.email, password: data.password })
       onSuccess?.(user)
     } catch (error) {

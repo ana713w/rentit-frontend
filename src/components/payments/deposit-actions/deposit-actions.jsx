@@ -3,10 +3,7 @@ import { captureDeposit, releaseDeposit } from '../../../services'
 import { formatCurrency } from '../../../lib/format'
 import { ConfirmButton, Input } from '../../ui'
 
-/**
- * Acciones del dueño sobre el depósito tras el check-out: devolverlo o retener una parte/todo.
- * paymentId es el id del pago, no el de la reserva.
- */
+// Devolver o retener el deposito tras el check-out
 function DepositActions({ paymentId, depositAmount, onChange }) {
   const [amount, setAmount] = useState('')
   const max = Number(depositAmount)

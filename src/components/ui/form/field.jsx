@@ -1,6 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-// Envoltorio común de todos los campos: etiqueta, ayuda y error
+// Envoltorio de campo: etiqueta, ayuda y error
 function Field({ label, htmlFor, hint, error, required, className, children }) {
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>

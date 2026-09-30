@@ -2,7 +2,7 @@ import { useFetch } from '../hooks'
 import { getOnboardingStatus } from '../services'
 import { Alert, AsyncContent, Button, Card } from '../components/ui'
 
-// Stripe devuelve aquí al usuario tras el alta
+// Vuelta de Stripe tras el alta
 function StripeOnboardingCompletePage() {
   const { data: status, loading, error, reload } = useFetch(getOnboardingStatus, [])
 

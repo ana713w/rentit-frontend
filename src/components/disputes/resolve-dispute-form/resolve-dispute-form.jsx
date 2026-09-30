@@ -15,7 +15,7 @@ const ERROR_MESSAGES = {
   409: 'La disputa ya está resuelta o el depósito ya no está retenido.',
 }
 
-// Formulario de admin para resolver una disputa (con acción opcional sobre el depósito)
+// Resolver disputa (admin)
 function ResolveDisputeForm({ dispute, onResolved, onCancel }) {
   const [serverError, setServerError] = useState(null)
   const {

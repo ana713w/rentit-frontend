@@ -1,6 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-// Control segmentado en píldora. tabs: [{ id, label, count? }]
+// Control segmentado
 function Tabs({ tabs, value, onChange, className }) {
   return (
     <div

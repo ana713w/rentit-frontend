@@ -4,7 +4,7 @@ import { createDispute } from '../../../services'
 import { applyServerErrors } from '../../../lib/form-errors'
 import { Alert, Button, Input, Textarea } from '../../ui'
 
-// Abrir una disputa sobre una reserva (cualquiera de las partes)
+// Abrir disputa sobre una reserva
 function DisputeForm({ reservationId, onCreated, onCancel }) {
   const [serverError, setServerError] = useState(null)
   const {

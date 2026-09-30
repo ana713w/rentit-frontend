@@ -22,10 +22,7 @@ function PhotoGroup({ title, photos, emptyText, renderActions }) {
   )
 }
 
-/**
- * Una verificación (check-in o check-out) compartida por las dos partes:
- * notas editables y fotos agrupadas en "mías" y "de la otra parte".
- */
+// Verificacion compartida: notas y fotos de cada parte
 function VerificationCard({ verification, userId }) {
   const [notes, setNotes] = useState(verification.notes || '')
   const [savedNotes, setSavedNotes] = useState(verification.notes || '')

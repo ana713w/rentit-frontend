@@ -7,7 +7,7 @@ import { Alert, Button, Icon, Input, Textarea } from '../../ui'
 
 const EMPTY_VALUES = { title: '', category: '', pricePerDay: '', depositAmount: '', description: '' }
 
-// Regla de negocio del backend: la fianza entre 3 y 365 veces el precio por día
+// Fianza entre 3 y 365 veces el precio por dia
 const validateDeposit = (value, values) => {
   if (!(value > 0)) return 'Debe ser mayor que 0'
   const price = values.pricePerDay
@@ -17,12 +17,7 @@ const validateDeposit = (value, values) => {
   return true
 }
 
-/**
- * Formulario de crear y editar objeto.
- *   <ItemForm onSubmit={createItem} submitLabel="Publicar" />
- *   <ItemForm defaultValues={itemToFormValues(item)} onSubmit={(v) => updateItem(item.id, v)} />
- * onSubmit recibe el body listo para la API; si la API devuelve un error, sus details se pintan en los campos.
- */
+// Formulario de crear y editar objeto
 function ItemForm({ defaultValues, onSubmit, onSuccess, submitLabel = 'Guardar' }) {
   const [serverError, setServerError] = useState(null)
   const [saved, setSaved] = useState(false)

@@ -1,4 +1,4 @@
-// Une clases CSS ignorando valores falsy (false, null, undefined, '')
+// Une clases ignorando falsy
 export function cn(...classes) {
   return classes.filter(Boolean).join(' ')
 }

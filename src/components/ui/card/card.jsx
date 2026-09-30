@@ -1,10 +1,7 @@
 import { cn } from '../../../lib/cn'
 import Icon from '../icon/icon'
 
-/**
- * Contenedor base: blanco, sin borde y con sombra ambiental. Con title/actions pinta una cabecera.
- *   <Card title="Contratos" icon="contract" subtitle="..." actions={<Button />}>...</Card>
- */
+// Contenedor base con cabecera opcional
 function Card({ title, subtitle, icon, actions, padded = true, className, children, as: Tag = 'section' }) {
   const hasHeader = title || subtitle || actions
 

@@ -1,6 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-// Los tonos son semánticos; sus colores se definen en styles/main.css
+// Tonos semanticos, colores en main.css
 const TONES = {
   primary: 'bg-primary-soft text-primary-strong',
   success: 'bg-success-soft text-success',
@@ -8,7 +8,7 @@ const TONES = {
   danger: 'bg-danger-soft text-danger',
   info: 'bg-info-soft text-info',
   neutral: 'bg-neutral-soft text-neutral',
-  // Sobre fotos: blanco translúcido con desenfoque
+  // sobre fotos
   glass: 'bg-surface/90 text-primary-strong shadow-card backdrop-blur-md',
 }
 
@@ -26,10 +26,7 @@ function Badge({ tone = 'neutral', className, children }) {
   )
 }
 
-/**
- * Badge a partir de un mapa de estados de lib/constants.js
- *   <StatusBadge status={reservation.status} map={RESERVATION_STATUS} />
- */
+// Badge a partir de un mapa de estados
 export function StatusBadge({ status, map, className }) {
   const config = map[status] || { label: status, tone: 'neutral' }
   return (

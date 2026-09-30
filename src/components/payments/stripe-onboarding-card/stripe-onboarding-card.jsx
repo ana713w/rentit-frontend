@@ -2,7 +2,7 @@ import { useAction, useFetch } from '../../../hooks'
 import { getOnboardingStatus, redirectToOnboarding } from '../../../services'
 import { Alert, AsyncContent, Badge, Button, Card } from '../../ui'
 
-// Estado de la cuenta de cobros del dueño + botón "Configurar cobros"
+// Estado de la cuenta de cobros
 function StripeOnboardingCard() {
   const { data: status, loading, error, reload } = useFetch(getOnboardingStatus, [])
   const start = useAction(redirectToOnboarding)

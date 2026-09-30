@@ -3,12 +3,7 @@ import Button from '../button/button'
 import Modal from '../modal/modal'
 import Alert from '../alert/alert'
 
-/**
- * Botón que pide confirmación antes de ejecutar una acción asíncrona.
- * Si onConfirm lanza un error, se muestra dentro del modal.
- *
- *   <ConfirmButton variant="danger" title="¿Cancelar la reserva?" onConfirm={cancel}>Cancelar</ConfirmButton>
- */
+// Boton con confirmacion en modal
 function ConfirmButton({
   title = '¿Quieres continuar?',
   message,

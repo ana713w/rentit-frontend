@@ -8,10 +8,7 @@ import { applyServerErrors } from '../../../lib/form-errors'
 import { MAX_RENTAL_DAYS } from '../../../lib/constants'
 import { Alert, Button, DateRangeFields } from '../../ui'
 
-/**
- * Formulario de solicitud de alquiler del detalle del objeto.
- * onDatesChange permite al padre pintar la selección en el calendario.
- */
+// Formulario de solicitud de alquiler
 function ReservationRequestForm({ item, blockedDates = [], onDatesChange }) {
   const { user } = useAuthContext()
   const navigate = useNavigate()

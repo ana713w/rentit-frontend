@@ -1,13 +1,6 @@
 import { useState } from 'react'
 
-/**
- * Envuelve una acción asíncrona (aceptar, borrar, pagar...) con estado de carga y error.
- *
- *   const accept = useAction(() => acceptReservation(id))
- *   const { ok } = await accept.run()
- *   <Button loading={accept.loading}>Aceptar</Button>
- *   {accept.error && <Alert tone="danger">{accept.error.message}</Alert>}
- */
+// Accion asincrona con estado de carga y error
 export function useAction(action) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)

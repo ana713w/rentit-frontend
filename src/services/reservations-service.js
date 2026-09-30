@@ -6,7 +6,7 @@ export const createReservation = (reservation) => http.post('/reservations', res
 export const listMyReservations = () => http.get('/reservations/mine')
 export const listOwnerReservations = () => http.get('/reservations/owner')
 
-// El detalle llega con date_range en vez de start_date/end_date: lo normalizamos aquí.
+// normaliza date_range a start_date/end_date
 export const getReservation = (id) => http.get(`/reservations/${id}`).then(normalizeReservation)
 
 export const acceptReservation = (id) => http.patch(`/reservations/${id}/accept`)

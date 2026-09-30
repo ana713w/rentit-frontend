@@ -19,7 +19,7 @@ function CardPaymentForm({ rentClientSecret, depositClientSecret, rentAmount, de
     setError(null)
     const card = elements.getElement(CardElement)
 
-    // 1. Alquiler (se cobra). Si ya se cobró en un intento anterior, no se repite.
+    // 1. Alquiler, no se repite si ya se cobro
     if (!rentPaid) {
       const rent = await stripe.confirmCardPayment(rentClientSecret, { payment_method: { card } })
       if (rent.error) {
@@ -30,7 +30,7 @@ function CardPaymentForm({ rentClientSecret, depositClientSecret, rentAmount, de
       setRentPaid(true)
     }
 
-    // 2. Depósito (solo se retiene)
+    // 2. Deposito, solo se retiene
     const deposit = await stripe.confirmCardPayment(depositClientSecret, { payment_method: { card } })
     setProcessing(false)
     if (deposit.error) {
@@ -69,9 +69,7 @@ function CardPaymentForm({ rentClientSecret, depositClientSecret, rentAmount, de
   )
 }
 
-/**
- * Pago con tarjeta de los dos cargos de una reserva (alquiler + depósito) con la misma tarjeta.
- */
+// Pago de alquiler y deposito con la misma tarjeta
 function StripePaymentForm(props) {
   if (!stripePromise) {
     return <Alert tone="warning">Falta VITE_STRIPE_PUBLISHABLE_KEY en el archivo .env</Alert>

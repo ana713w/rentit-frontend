@@ -1,6 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-// items: [{ label, value }] — pares etiqueta/valor (resúmenes de reserva, pago...)
+// items: [{ label, value }]
 function DetailList({ items, columns = 2, className }) {
   return (
     <dl className={cn('grid gap-x-6 gap-y-4', columns === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3', className)}>

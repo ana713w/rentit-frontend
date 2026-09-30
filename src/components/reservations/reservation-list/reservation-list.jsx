@@ -1,6 +1,6 @@
 import ReservationCard from '../reservation-card/reservation-card'
 
-// renderActions(reservation) → botones opcionales en cada fila
+// renderActions: botones opcionales por fila
 function ReservationList({ reservations, renderActions }) {
   return (
     <div className="flex flex-col gap-3">

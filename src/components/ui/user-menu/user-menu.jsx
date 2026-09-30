@@ -12,7 +12,7 @@ export function Avatar({ name, className = 'size-9 text-sm' }) {
   )
 }
 
-// Avatar con menú desplegable: perfil, mis objetos, admin y cerrar sesión
+// Menu de usuario
 function UserMenu() {
   const { user, isAdmin, logout } = useAuthContext()
   const navigate = useNavigate()

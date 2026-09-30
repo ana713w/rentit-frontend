@@ -6,22 +6,18 @@ import StripePaymentForm from '../stripe-payment-form/stripe-payment-form'
 import PaymentSummary from '../payment-summary/payment-summary'
 import DepositActions from '../deposit-actions/deposit-actions'
 
-// 404 = todavía no hay pago
+// 404 = aun no hay pago
 const fetchPayment = (reservationId) =>
   getPayment(reservationId).catch((error) => (error.status === 404 ? null : Promise.reject(error)))
 
-/**
- * Pago de una reserva.
- * - Arrendatario: paga alquiler + depósito con Stripe cuando la reserva está confirmada.
- * - Dueño: ve el estado y, tras el check-out, devuelve o retiene el depósito.
- */
+// Pago de una reserva (arrendatario y dueño)
 function PaymentSection({ reservation, role, onChange }) {
   const { data: payment, loading, error, reload } = useFetch(() => fetchPayment(reservation.id), [reservation.id])
-  // Los client secrets solo llegan en el POST: los guardamos mientras se completa el pago
+  // los client secrets solo llegan en el POST
   const [secrets, setSecrets] = useState(null)
   const start = useAction(() => createPayment(reservation.id))
 
-  // onChange: avisa al padre de que el pago puede haber cambiado (línea de tiempo)
+  // avisa al padre si cambia el pago
   const refresh = () => {
     reload()
     onChange?.()
@@ -40,7 +36,7 @@ function PaymentSection({ reservation, role, onChange }) {
     refresh()
   }
 
-  // Si el backend llega a devolver los secrets en el GET mientras está pending, también los usamos
+  // usa los secrets del GET si llegan
   const activeSecrets = secrets || (payment?.rent_status === 'pending' && payment?.rentClientSecret ? payment : null)
 
   const isGuest = role === 'guest'
@@ -64,7 +60,7 @@ function PaymentSection({ reservation, role, onChange }) {
           <div className="flex flex-col gap-4">
             {payment && <PaymentSummary payment={payment} showPlatformFee={!isGuest} />}
 
-            {/* Arrendatario: iniciar o completar el pago */}
+            {/* Arrendatario */}
             {canPay && activeSecrets && (
               <StripePaymentForm
                 rentClientSecret={activeSecrets.rentClientSecret}

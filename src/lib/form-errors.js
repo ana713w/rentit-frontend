@@ -23,7 +23,7 @@ export const rules = {
     return true
   },
   positive: (value) => Number(value) > 0 || 'Debe ser mayor que 0',
-  // Para AddressField ({ address, latitude, longitude }): opcional, pero con 5 caracteres si se rellena
+  // opcional, minimo 5 caracteres
   address: ({ address }) => !address.trim() || address.trim().length >= 5 || 'Mínimo 5 caracteres',
   uuid: {
     value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,

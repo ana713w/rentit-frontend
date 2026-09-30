@@ -1,10 +1,7 @@
 import { acceptReservation, cancelReservation, rejectReservation } from '../../../services'
 import { ConfirmButton } from '../../ui'
 
-/**
- * Botones de cambio de estado según el rol y el estado de la reserva.
- * onChange(reservaActualizada) se llama tras cada acción correcta.
- */
+// Botones de cambio de estado segun rol y estado
 function ReservationActions({ reservation, role, onChange, size = 'sm' }) {
   const { id, status } = reservation
   const isOwner = role === 'owner'

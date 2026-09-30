@@ -7,7 +7,7 @@ import { applyServerErrors } from '../../../lib/form-errors'
 import { Alert, AsyncContent, Button, Card, ConfirmButton, DateRangeFields, Input } from '../../ui'
 import AvailabilityCalendar from '../availability-calendar/availability-calendar'
 
-// Bloqueo de fechas de un objeto (solo dueño): días en que no se puede alquilar
+// Bloqueo de fechas (solo dueño)
 function BlockedDatesManager({ itemId }) {
   const { data: blocks, loading, error, reload } = useFetch(() => listBlockedDates(itemId), [itemId])
   const [serverError, setServerError] = useState(null)

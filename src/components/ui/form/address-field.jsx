@@ -16,12 +16,7 @@ import { controlClasses } from './control-classes'
 const EMPTY = { address: '', latitude: null, longitude: null }
 const hasCoords = (value) => value?.latitude != null && value?.longitude != null
 
-/**
- * Dirección con autocompletado de Google y botón «Usar mi ubicación».
- * value / onChange: { address, latitude, longitude } — las coordenadas no se muestran,
- * se rellenan al elegir una sugerencia o al usar la ubicación del dispositivo.
- *   <Controller name="location" control={control} render={({ field }) => <AddressField {...field} />} />
- */
+// Direccion con autocompletado y ubicacion del dispositivo
 function AddressField({ label, hint, error, required, placeholder = 'Calle, número y ciudad', value, onChange, name }) {
   const inputId = useId()
   const listId = useId()
@@ -57,7 +52,7 @@ function AddressField({ label, hint, error, required, placeholder = 'Calle, núm
 
   const handleType = (event) => {
     const address = event.target.value
-    // Al escribir a mano la ubicación anterior deja de ser válida
+    // al escribir a mano se descartan las coordenadas
     onChange({ address, latitude: null, longitude: null })
     setLocalError(null)
     search(address)

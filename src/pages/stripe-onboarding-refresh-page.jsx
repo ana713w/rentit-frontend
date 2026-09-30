@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { redirectToOnboarding } from '../services'
 import { Alert, Button, Card, LoadingScreen } from '../components/ui'
 
-// El enlace de Stripe caducó: pedimos uno nuevo y redirigimos
+// Enlace caducado: pide uno nuevo
 function StripeOnboardingRefreshPage() {
   const [error, setError] = useState(null)
   const [attempt, setAttempt] = useState(0)

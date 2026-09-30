@@ -23,7 +23,7 @@ const SORTS = {
   expensive: { label: 'Precio más alto', compare: (a, b) => Number(b.price_per_day) - Number(a.price_per_day) },
 }
 
-// GET /items solo filtra por cercanía (lat, lng, radiusKm): texto, categoría y precio se filtran en el cliente
+// la API solo filtra por cercania, el resto en cliente
 const normalize = (text) =>
   (text || '')
     .toLowerCase()
@@ -104,7 +104,7 @@ function SearchHero({ q, maxPrice, onSearch, onMaxPriceChange }) {
   )
 }
 
-// «Cerca de mí»: usa la ubicación guardada en el perfil y, si no hay, la del navegador
+// Cerca de mi: perfil o navegador
 function NearMeBar({ near, locating, error, onEnable, onDisable, onRadiusChange }) {
   const origin = near?.source === 'profile' ? 'tu dirección' : 'tu ubicación actual'
 
@@ -179,7 +179,7 @@ function PromoBanner() {
 
 function HomePage() {
   const { user } = useAuthContext()
-  // near: { latitude, longitude, radiusKm, source: 'profile' | 'device' } o null para ver todos los objetos
+  // near: ubicacion y radio, o null
   const [near, setNear] = useState(null)
   const [locating, setLocating] = useState(false)
   const [locationError, setLocationError] = useState(null)
@@ -187,7 +187,7 @@ function HomePage() {
     () => listItems(near ? { lat: near.latitude, lng: near.longitude, radiusKm: near.radiusKm } : undefined),
     [near],
   )
-  // Búsqueda y categoría van en la URL para que el buscador de la cabecera y el botón atrás funcionen
+  // busqueda y categoria en la URL
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
   const category = searchParams.get('category') || ''

@@ -6,7 +6,7 @@ import { Button, Icon } from '../../ui'
 const WEEKDAYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
 const monthFormatter = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' })
 
-// Fin excluido: un bloqueo del 10 al 15 ocupa los días del 10 al 14
+// Fin excluido: del 10 al 15 ocupa del 10 al 14
 const isInRange = (day, start, end) => Boolean(start && end) && day >= start && day < end
 
 function MonthGrid({ year, month, today, blockedRanges, selectedRange }) {
@@ -54,10 +54,7 @@ function MonthGrid({ year, month, today, blockedRanges, selectedRange }) {
   )
 }
 
-/**
- * Calendario de disponibilidad. Pinta las fechas bloqueadas y, opcionalmente, el rango elegido.
- *   <AvailabilityCalendar blockedRanges={blockedDates} selectedRange={{ startDate, endDate }} />
- */
+// Calendario con fechas bloqueadas y rango elegido
 function AvailabilityCalendar({ blockedRanges = [], selectedRange, months = 2 }) {
   const [offset, setOffset] = useState(0)
   const now = new Date()

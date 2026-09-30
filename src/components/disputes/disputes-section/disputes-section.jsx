@@ -5,7 +5,7 @@ import { AsyncContent, Button, Card } from '../../ui'
 import DisputeCard from '../dispute-card/dispute-card'
 import DisputeForm from '../dispute-form/dispute-form'
 
-// Disputas de una reserva. Solo puede haber una sin resolver a la vez.
+// Disputas de una reserva, solo una abierta a la vez
 function DisputesSection({ reservationId }) {
   const { data: disputes, loading, error, reload } = useFetch(
     () => listReservationDisputes(reservationId),

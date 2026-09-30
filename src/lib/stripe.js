@@ -2,7 +2,7 @@ import { loadStripe } from '@stripe/stripe-js'
 
 const publishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
 
-// Se carga una sola vez; null si falta la clave en el .env
+// null si falta la clave
 export const stripePromise = publishableKey ? loadStripe(publishableKey) : null
 
 export function getCardElementStyle() {

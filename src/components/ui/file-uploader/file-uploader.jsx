@@ -13,10 +13,7 @@ function validateFiles(files, maxFiles, maxSizeMB) {
   return null
 }
 
-/**
- * Selector de imágenes con previsualización y validación (tipo, tamaño y número).
- *   <FileUploader onUpload={(files) => uploadItemImages(id, files)} onUploaded={reload} />
- */
+// Selector de imagenes con validacion
 function FileUploader({
   onUpload,
   onUploaded,

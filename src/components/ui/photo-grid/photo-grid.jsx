@@ -1,13 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-/**
- * Rejilla de fotos con acciones opcionales por foto.
- *   <PhotoGrid
- *     photos={images}
- *     renderBadge={(img) => img.is_primary && <Badge>Principal</Badge>}
- *     renderActions={(img) => <Button size="sm">Borrar</Button>}
- *   />
- */
+// Rejilla de fotos con acciones opcionales
 function PhotoGrid({ photos, renderBadge, renderActions, className }) {
   return (
     <ul className={cn('grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4', className)}>

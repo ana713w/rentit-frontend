@@ -4,10 +4,7 @@ import { RESERVATION_STATUS } from '../../../lib/constants'
 import { countNights, formatCurrency, formatDate } from '../../../lib/format'
 import { Icon, ImagePlaceholder, StatusBadge } from '../../ui'
 
-/**
- * Fila de reserva para los listados. Las listas no traen el título del objeto,
- * así que lo pide con useItem. actions: botones opcionales (aceptar/rechazar...).
- */
+// Fila de reserva, el titulo se pide con useItem
 function ReservationCard({ reservation, actions }) {
   const { data: item, error } = useItem(reservation.item_id)
   const imageUrl = usePrimaryImage(reservation.item_id)

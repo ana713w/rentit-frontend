@@ -8,5 +8,5 @@ export const getContract = (id) => http.get(`/contracts/${id}`)
 
 export const requestContractOtp = (id) => http.post(`/contracts/${id}/otp`)
 
-// El OTP va como string para no perder los ceros iniciales
+// OTP como string por los ceros iniciales
 export const signContract = (id, otp) => http.post(`/contracts/${id}/sign`, { otp: String(otp), accepted: true })

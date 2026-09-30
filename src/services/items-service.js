@@ -1,14 +1,14 @@
 import { http } from '../lib/api'
 
 // Objetos
-// params opcionales { lat, lng, radiusKm }: búsqueda por cercanía (devuelve distance_km)
+// params opcionales { lat, lng, radiusKm }
 export const listItems = (params) => http.get('/items', { params })
 export const getItem = (id) => http.get(`/items/${id}`)
 export const createItem = (item) => http.post('/items', item)
 export const updateItem = (id, item) => http.patch(`/items/${id}`, item)
 export const deactivateItem = (id) => http.delete(`/items/${id}`)
 
-// Imágenes
+// Imagenes
 export const listItemImages = (id) => http.get(`/items/${id}/images`)
 
 export const uploadItemImages = (id, files) => {

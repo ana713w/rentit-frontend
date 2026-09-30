@@ -4,7 +4,7 @@ import { getMe, login as loginRequest, logout as logoutRequest } from '../servic
 import { LoadingScreen } from '../components/ui'
 
 export function AuthProvider({ children }) {
-  // undefined = comprobando la sesión · null = anónimo · objeto = logueado
+  // undefined = cargando, null = anonimo
   const [user, setUser] = useState(undefined)
 
   const refresh = useCallback(

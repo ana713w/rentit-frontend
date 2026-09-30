@@ -21,10 +21,7 @@ function SignatureStatus({ label, signedAt }) {
   )
 }
 
-/**
- * Un contrato con su estado de firmas y el flujo de firma con código por email.
- * role: 'guest' | 'owner'
- */
+// Contrato con estado de firmas y firma por OTP
 function ContractCard({ contract, role, onChange }) {
   const mySignedAt = role === 'guest' ? contract.guest_signed_at : contract.owner_signed_at
   const [codeSent, setCodeSent] = useState(false)

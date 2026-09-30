@@ -18,13 +18,7 @@ const SIZES = {
   lg: 'h-12 px-7 text-base',
 }
 
-/**
- * Botón único de la app (píldora).
- * - to="/ruta"  → se renderiza como <Link>
- * - href="..."  → se renderiza como <a> (enlaces externos, PDFs)
- * - icon="add"  → icono de Material Symbols delante del texto
- * - loading     → muestra spinner y se deshabilita
- */
+// Boton de la app: to, href, icon y loading
 function Button({
   variant = 'primary',
   size = 'md',

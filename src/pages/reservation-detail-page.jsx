@@ -11,7 +11,7 @@ import { VerificationsSection } from '../components/verifications'
 import { DisputesSection } from '../components/disputes'
 import { Alert, AsyncContent, Card, DetailList, ImagePlaceholder, StatusBadge } from '../components/ui'
 
-// Mensaje de ayuda según estado y rol
+// Ayuda segun estado y rol
 const STATUS_HINTS = {
   pending: {
     guest: 'Tu solicitud está pendiente de que el propietario la acepte.',
@@ -55,7 +55,7 @@ function ReservationDetailPage() {
   const { data: reservation, loading, error, reload } = useFetch(() => getReservation(id), [id])
   const { data: item } = useItem(reservation?.item_id)
   const imageUrl = usePrimaryImage(reservation?.item_id)
-  // Se incrementa cuando una sección cambia algo, para recalcular la línea de tiempo
+  // fuerza recalcular la linea de tiempo
   const [progressKey, setProgressKey] = useState(0)
   const bumpProgress = () => setProgressKey((key) => key + 1)
 

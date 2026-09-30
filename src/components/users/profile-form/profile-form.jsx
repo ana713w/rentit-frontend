@@ -8,7 +8,7 @@ import { AddressField, Alert, Button, Input } from '../../ui'
 
 const LOCATION_FIELDS = ['address', 'latitude', 'longitude']
 
-// Datos del usuario y su dirección (donde se recogen y devuelven sus objetos) → PATCH /auth/me
+// Datos y direccion del usuario
 function ProfileForm({ onSuccess }) {
   const { user, refresh } = useAuthContext()
   const [serverError, setServerError] = useState(null)
@@ -25,16 +25,16 @@ function ProfileForm({ onSuccess }) {
     setServerError(null)
     setSaved(false)
     try {
-      // La API valida la longitud mínima de la dirección: los vacíos no se envían
+      // los vacios no se envian
       await updateMe({
         fullName: fullName.trim(),
         phone: phone.trim(),
         ...(location.address.trim() ? { address: location.address.trim() } : {}),
-        // Sin coordenadas (dirección escrita a mano) se borran las anteriores para no dejar una ubicación obsoleta
+        // sin coordenadas se borran las anteriores
         latitude: location.latitude ?? null,
         longitude: location.longitude ?? null,
       })
-      // PATCH /auth/me no devuelve isAdmin: recargamos la sesión completa
+      // recarga la sesion para tener isAdmin
       const me = await refresh()
       setSaved(true)
       onSuccess?.(me)

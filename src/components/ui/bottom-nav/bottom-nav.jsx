@@ -25,7 +25,7 @@ function Tab({ to, label, icon, end }) {
   )
 }
 
-// Barra de pestañas fija abajo en móvil (< md): Inicio, Favoritos, + Subir, Reservas, Perfil
+// Barra inferior en movil
 function BottomNav() {
   const [home, favorites, reservations, profile] = NAV_LINKS
 

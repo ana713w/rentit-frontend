@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuthContext } from '../contexts/auth-context'
 
-// <PrivateRoute> exige sesión · <PrivateRoute admin> exige además ser admin
+// Exige sesion, y admin si se indica
 function PrivateRoute({ admin = false, children }) {
   const { user, isAdmin } = useAuthContext()
   const location = useLocation()

@@ -6,8 +6,8 @@ import ContractCard from '../contract-card/contract-card'
 
 const isFullySigned = (contract) => Boolean(contract?.guest_signed_at && contract?.owner_signed_at)
 
-// Contratos de entrega (rental) y devolución (return) de una reserva.
-// onChange: avisa al padre tras generar o firmar (p. ej. para la línea de tiempo)
+// Contratos de entrega y devolucion
+// onChange avisa al padre tras generar o firmar
 function ContractsSection({ reservationId, role, onChange }) {
   const { data: contracts, loading, error, reload } = useFetch(() => listContracts(reservationId), [reservationId])
   const create = useAction((type) => createContract(reservationId, type))

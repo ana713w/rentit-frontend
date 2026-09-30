@@ -1,10 +1,7 @@
 import { cn } from '../../../lib/cn'
 import Icon from '../icon/icon'
 
-/**
- * Chip de filtro en píldora. Activo = turquesa relleno.
- *   <Chip active={x === 'all'} onClick={() => setX('all')} count={3}>Todas</Chip>
- */
+// Chip de filtro
 function Chip({ active = false, icon, count, onClick, className, children, ...props }) {
   return (
     <button

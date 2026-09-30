@@ -1,5 +1,5 @@
-// Google Maps Platform: autocompletado de direcciones (Places API New) y geocodificación inversa.
-// La clave va en VITE_GOOGLE_MAPS_API_KEY; sin ella la dirección se escribe a mano.
+// Autocompletado y geocodificacion con Google Maps
+// sin VITE_GOOGLE_MAPS_API_KEY la direccion se escribe a mano
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 const CALLBACK = '__rentitGoogleMapsReady'
 
@@ -30,7 +30,7 @@ export function loadGoogleMaps() {
 
 const round6 = (value) => Math.round(value * 1e6) / 1e6
 
-// Un token por "sesión de búsqueda": Google factura juntas las sugerencias y el detalle final
+// un token por sesion de busqueda
 export async function newSessionToken() {
   const maps = await loadGoogleMaps()
   const { AutocompleteSessionToken } = await maps.importLibrary('places')
@@ -55,7 +55,7 @@ export async function searchAddresses(input, sessionToken) {
     }))
 }
 
-// Dirección completa y coordenadas de la sugerencia elegida
+// Direccion y coordenadas de la sugerencia
 export async function resolvePlace(prediction) {
   const place = prediction.toPlace()
   await place.fetchFields({ fields: ['formattedAddress', 'location'] })
@@ -73,7 +73,7 @@ export async function reverseGeocode(latitude, longitude) {
   return results[0]?.formatted_address || null
 }
 
-// Posición del dispositivo (pide permiso al usuario)
+// Posicion del dispositivo
 export function getCurrentPosition() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {

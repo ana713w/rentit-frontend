@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from 'react'
 
-// La API no tiene favoritos: se guardan en este navegador (localStorage).
+// Favoritos en localStorage
 const STORAGE_KEY = 'rentit:favorites'
 const listeners = new Set()
 let cache = null
@@ -21,7 +21,7 @@ function write(ids) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ids))
   } catch {
-    // Modo privado o almacenamiento lleno: se mantienen solo en memoria
+    // si falla se quedan en memoria
   }
   listeners.forEach((listener) => listener())
 }
@@ -40,9 +40,6 @@ function subscribe(listener) {
   }
 }
 
-/**
- *   const { ids, isFavorite, toggle } = useFavorites()
- */
 export function useFavorites() {
   const ids = useSyncExternalStore(subscribe, read, () => [])
 

@@ -1,7 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-// Clases compartidas por input, select y textarea.
-// rounded-input y no rounded-control: la píldora queda para botones y chips.
+// Clases comunes de input, select y textarea
 export const controlClasses = (hasError) =>
   cn(
     'w-full rounded-input border bg-surface px-3.5 text-sm text-fg transition-colors',

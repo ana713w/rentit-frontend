@@ -8,7 +8,7 @@ function ItemCreatePage() {
   const navigate = useNavigate()
   const { user } = useAuthContext()
 
-  // La API exige dirección en el perfil para publicar (es donde se recogen los objetos)
+  // hace falta direccion en el perfil
   if (!user.address) {
     return (
       <div className="mx-auto max-w-2xl">

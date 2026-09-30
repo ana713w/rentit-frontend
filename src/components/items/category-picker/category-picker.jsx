@@ -2,10 +2,7 @@ import { ITEM_CATEGORIES } from '../../../lib/constants'
 import { cn } from '../../../lib/cn'
 import { Icon } from '../../ui'
 
-/**
- * Carrusel de categorías con iconos redondos (Home). value = categoría activa o '' para todas.
- * Pulsar la activa la desmarca.
- */
+// Carrusel de categorias, pulsar la activa la desmarca
 function CategoryPicker({ value, onChange }) {
   return (
     <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pt-1 pb-2 scrollbar-none sm:gap-4">

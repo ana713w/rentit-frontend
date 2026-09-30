@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { cn } from '../../../lib/cn'
 import ImagePlaceholder from '../image-placeholder/image-placeholder'
 
-// Galería con imagen grande y miniaturas. images: [{ id, url }]
+// Galeria con miniaturas
 function ImageGallery({ images = [], alt = '' }) {
   const [selectedId, setSelectedId] = useState(null)
 

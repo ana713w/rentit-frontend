@@ -2,10 +2,7 @@ import { DISPUTE_STATUS } from '../../../lib/constants'
 import { formatCurrency, formatDateTime } from '../../../lib/format'
 import { StatusBadge } from '../../ui'
 
-/**
- * Una disputa con su motivo y, si está resuelta, la resolución.
- * children: acciones extra (el panel de admin mete aquí revisar/resolver).
- */
+// Disputa con su motivo y resolucion
 function DisputeCard({ dispute, header, children }) {
   return (
     <article className="flex flex-col gap-3 rounded-input bg-surface-muted p-4">

@@ -5,10 +5,7 @@ import { formatDistance, formatPrice } from '../../../lib/format'
 import { Badge, Icon, ImagePlaceholder } from '../../ui'
 import FavoriteButton from '../favorite-button/favorite-button'
 
-/**
- * Tarjeta de objeto para listados: foto cuadrada, corazón, precio en negrita, título en una línea.
- * actions: botones extra bajo la tarjeta (p. ej. "Gestionar" en Mis objetos).
- */
+// Tarjeta de objeto para listados
 function ItemCard({ item, actions }) {
   const imageUrl = usePrimaryImage(item.id)
   const category = getCategory(item.category)

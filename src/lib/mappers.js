@@ -1,4 +1,4 @@
-// Convierte la respuesta de la API (snake_case) en valores del formulario (camelCase)
+// API (snake_case) a formulario (camelCase)
 export function itemToFormValues(item) {
   if (!item) return undefined
   return {
@@ -16,7 +16,7 @@ export function userToFormValues(user) {
   return {
     fullName: user?.full_name ?? '',
     phone: user?.phone ?? '',
-    // Dirección + coordenadas (ocultas) que rellena AddressField
+    // direccion y coordenadas
     location: {
       address: user?.address ?? '',
       latitude: toCoord(user?.latitude),

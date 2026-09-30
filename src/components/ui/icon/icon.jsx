@@ -1,10 +1,6 @@
 import { cn } from '../../../lib/cn'
 
-/**
- * Icono de Material Symbols Outlined (la fuente se carga en styles/main.css).
- *   <Icon name="favorite" filled className="text-xl" />
- * Tamaño con text-*: los iconos son texto.
- */
+// Icono de Material Symbols, tamaño con text-*
 function Icon({ name, filled = false, className, label }) {
   return (
     <span
