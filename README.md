@@ -26,7 +26,6 @@ El backend tiene que estar en `http://localhost:3000`. Para que los pagos cambie
 
 ## Estilos: todo en `src/styles/main.css`
 
-El sistema de diseño (pantallas de Google Stitch) está en [`docs/design/DESIGN.md`](docs/design/DESIGN.md).
 Colores, tipografía, radios, sombras y ancho de página son **tokens** en el bloque `@theme` de
 `src/styles/main.css`. Tailwind genera las clases a partir de ellos:
 
