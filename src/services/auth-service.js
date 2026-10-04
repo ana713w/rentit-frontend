@@ -12,4 +12,4 @@ export const getMe = () => http.get('/auth/me', { ignoreUnauthorized: true })
 // Nombre, telefono y direccion
 export const updateMe = (data) => http.patch('/auth/me', data)
 
-export const promoteAdmin = (userId) => http.post('/admin/promote', { userId })
+export const promoteAdmin = (email) => http.post('/admin/promote', { email })

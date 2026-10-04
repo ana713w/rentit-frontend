@@ -33,8 +33,4 @@ export const rules = {
     value: /^\+?[0-9\s()-]{6,}$/,
     message: 'Introduce un teléfono válido',
   },
-  uuid: {
-    value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-    message: 'Debe ser un UUID válido',
-  },
 }

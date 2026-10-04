@@ -6,7 +6,7 @@ import { Alert, Button, Card, Input, PageHeader } from '../components/ui'
 
 const ERROR_MESSAGES = {
   400: 'Ese usuario ya es administrador.',
-  404: 'No existe ningún usuario con ese id.',
+  404: 'No existe ningún usuario con ese email.',
 }
 
 function AdminPromotePage() {
@@ -17,12 +17,12 @@ function AdminPromotePage() {
     reset,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm({ defaultValues: { userId: '' } })
+  } = useForm({ defaultValues: { email: '' } })
 
-  const onSubmit = async ({ userId }) => {
+  const onSubmit = async ({ email }) => {
     setResult(null)
     try {
-      const response = await promoteAdmin(userId.trim())
+      const response = await promoteAdmin(email.trim())
       setResult({ tone: 'success', message: response?.message || 'Usuario promovido a administrador.' })
       reset()
     } catch (error) {
@@ -37,10 +37,12 @@ function AdminPromotePage() {
       <Card>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
           <Input
-            label="Id del usuario"
-            placeholder="00000000-0000-0000-0000-000000000000"
-            error={errors.userId?.message}
-            {...register('userId', { required: rules.required(), pattern: rules.uuid })}
+            label="Email del usuario"
+            type="email"
+            placeholder="usuario@ejemplo.com"
+            hint="El usuario tiene que estar registrado."
+            error={errors.email?.message}
+            {...register('email', { required: rules.required(), pattern: rules.email })}
           />
           {result && <Alert tone={result.tone}>{result.message}</Alert>}
           <div>
