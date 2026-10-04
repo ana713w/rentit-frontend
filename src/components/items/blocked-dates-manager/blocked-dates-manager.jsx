@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useFetch } from '../../../hooks'
 import { createBlockedDates, deleteBlockedDates, listBlockedDates } from '../../../services'
 import { formatDate, toISODate } from '../../../lib/format'
@@ -16,8 +16,10 @@ function BlockedDatesManager({ itemId }) {
     handleSubmit,
     reset,
     setError,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({ defaultValues: { startDate: '', endDate: '', reason: '' } })
+  const startDate = useWatch({ control, name: 'startDate' })
 
   const onSubmit = async ({ reason, ...dates }) => {
     setServerError(null)
@@ -40,7 +42,7 @@ function BlockedDatesManager({ itemId }) {
         <AvailabilityCalendar blockedRanges={blocks || []} />
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3 rounded-input bg-surface-muted p-4">
-          <DateRangeFields register={register} errors={errors} min={toISODate(new Date())} />
+          <DateRangeFields register={register} errors={errors} min={toISODate(new Date())} startValue={startDate} />
           <Input label="Motivo (opcional)" {...register('reason')} />
           <Alert error={serverError} />
           <div>

@@ -90,6 +90,12 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
   }
+
+  /* Edge añade su propio ojo; se usa el del componente Input */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
 }
 
 @utility icon {

@@ -25,6 +25,14 @@ export const rules = {
   positive: (value) => Number(value) > 0 || 'Debe ser mayor que 0',
   // opcional, minimo 5 caracteres
   address: ({ address }) => !address.trim() || address.trim().length >= 5 || 'Mínimo 5 caracteres',
+  requiredAddress: ({ address }) => {
+    if (!address.trim()) return 'Este campo es obligatorio'
+    return address.trim().length >= 5 || 'Mínimo 5 caracteres'
+  },
+  phone: {
+    value: /^\+?[0-9\s()-]{6,}$/,
+    message: 'Introduce un teléfono válido',
+  },
   uuid: {
     value: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
     message: 'Debe ser un UUID válido',

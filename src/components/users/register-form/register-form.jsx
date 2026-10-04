@@ -29,11 +29,11 @@ function RegisterForm({ onSuccess }) {
   const onSubmit = async ({ phone, location, ...data }) => {
     setServerError(null)
     try {
-      // los opcionales vacios no se envian
       await registerRequest({
         ...data,
-        ...(phone ? { phone } : {}),
-        ...(location.address.trim() ? { address: location.address.trim() } : {}),
+        phone: phone.trim(),
+        address: location.address.trim(),
+        // coordenadas solo si se eligio una sugerencia o «Usar mi ubicación»
         ...(location.latitude != null ? { latitude: location.latitude, longitude: location.longitude } : {}),
       })
       // login tras el registro
@@ -71,18 +71,25 @@ function RegisterForm({ onSuccess }) {
       <Input
         label="Teléfono"
         type="tel"
+        required
         autoComplete="tel"
+        hint="Se comparte con la otra parte cuando se acepta una reserva"
         error={errors.phone?.message}
-        {...register('phone', { maxLength: { value: 30, message: 'Máximo 30 caracteres' } })}
+        {...register('phone', {
+          required: rules.required(),
+          pattern: rules.phone,
+          maxLength: { value: 30, message: 'Máximo 30 caracteres' },
+        })}
       />
       <Controller
         name="location"
         control={control}
-        rules={{ validate: rules.address }}
+        rules={{ validate: rules.requiredAddress }}
         render={({ field, fieldState }) => (
           <AddressField
             label="Dirección"
-            hint="Opcional. Es donde se recogen tus objetos; la necesitas para publicar."
+            required
+            hint="Es donde se recogen y devuelven tus objetos."
             error={fieldState.error?.message}
             {...field}
           />

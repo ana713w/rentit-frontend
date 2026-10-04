@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../../../contexts/auth-context'
 import { createReservation } from '../../../services'
-import { countNights, formatCurrency, rangesOverlap, toISODate } from '../../../lib/format'
+import { addDays, countNights, formatCurrency, rangesOverlap, toISODate } from '../../../lib/format'
 import { applyServerErrors } from '../../../lib/form-errors'
 import { MAX_RENTAL_DAYS } from '../../../lib/constants'
 import { Alert, Button, DateRangeFields } from '../../ui'
@@ -21,11 +21,21 @@ function ReservationRequestForm({ item, blockedDates = [], onDatesChange }) {
     handleSubmit,
     control,
     getValues,
+    setValue,
     setError,
     formState: { errors, isSubmitting },
   } = useForm({ defaultValues: { startDate: '', endDate: '' } })
 
   const [startDate, endDate] = useWatch({ control, name: ['startDate', 'endDate'] })
+
+  // si cambia la recogida y la devolucion queda fuera de rango, se borra
+  useEffect(() => {
+    const current = getValues('endDate')
+    if (startDate && current && (current <= startDate || current > addDays(startDate, MAX_RENTAL_DAYS))) {
+      setValue('endDate', '')
+      onDatesChange?.(getValues())
+    }
+  }, [startDate, getValues, setValue, onDatesChange])
   const nights = endDate > startDate ? countNights(startDate, endDate) : 0
   const pricePerDay = Number(item.price_per_day)
   const overlapsBlocked = nights > 0 && blockedDates.some((b) => rangesOverlap(startDate, endDate, b.start_date, b.end_date))
@@ -69,7 +79,15 @@ function ReservationRequestForm({ item, blockedDates = [], onDatesChange }) {
       noValidate
       className="flex flex-col gap-4"
     >
-      <DateRangeFields register={register} errors={errors} min={today} startLabel="Recogida" endLabel="Devolución" />
+      <DateRangeFields
+        register={register}
+        errors={errors}
+        min={today}
+        startValue={startDate}
+        maxNights={MAX_RENTAL_DAYS}
+        startLabel="Recogida"
+        endLabel="Devolución"
+      />
 
       {nights > 0 && (
         <dl className="flex flex-col gap-2 rounded-input bg-surface-muted p-4 text-sm">

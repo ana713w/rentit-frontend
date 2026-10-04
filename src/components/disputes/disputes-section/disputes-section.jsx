@@ -5,8 +5,8 @@ import { AsyncContent, Button, Card } from '../../ui'
 import DisputeCard from '../dispute-card/dispute-card'
 import DisputeForm from '../dispute-form/dispute-form'
 
-// Disputas de una reserva, solo una abierta a la vez
-function DisputesSection({ reservationId }) {
+// Disputas de una reserva, solo una abierta a la vez y desde el check-in
+function DisputesSection({ reservationId, canOpen }) {
   const { data: disputes, loading, error, reload } = useFetch(
     () => listReservationDisputes(reservationId),
     [reservationId],
@@ -19,14 +19,18 @@ function DisputesSection({ reservationId }) {
     <Card
       icon="gavel"
       title="Disputas"
-      subtitle="Si algo no ha ido bien, abre una disputa y un administrador la revisará."
+      subtitle={
+        canOpen
+          ? 'Si algo no ha ido bien, abre una disputa y un administrador la revisará.'
+          : 'Podrás abrir una disputa a partir del check-in.'
+      }
       actions={
         !formOpen && (
           <Button
             size="sm"
             variant="secondary"
-            disabled={hasUnresolved || !disputes}
-            title={hasUnresolved ? 'Ya hay una disputa en curso' : undefined}
+            disabled={!canOpen || hasUnresolved || !disputes}
+            title={!canOpen ? 'Disponible a partir del check-in' : hasUnresolved ? 'Ya hay una disputa en curso' : undefined}
             onClick={() => setFormOpen(true)}
           >
             Abrir disputa

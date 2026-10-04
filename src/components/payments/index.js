@@ -1,5 +1,4 @@
 export { default as DepositActions } from './deposit-actions/deposit-actions'
 export { default as PaymentSection } from './payment-section/payment-section'
 export { default as PaymentSummary } from './payment-summary/payment-summary'
-export { default as StripePaymentForm } from './stripe-payment-form/stripe-payment-form'
 export { default as StripeOnboardingCard } from './stripe-onboarding-card/stripe-onboarding-card'

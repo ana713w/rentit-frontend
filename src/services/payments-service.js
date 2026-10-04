@@ -13,6 +13,11 @@ export const getOnboardingStatus = () => http.get('/payments/onboarding/status')
 // Ojo: :id en capture/release es el del pago
 export const createPayment = (reservationId) => http.post(`/reservations/${reservationId}/payments`)
 export const getPayment = (reservationId) => http.get(`/reservations/${reservationId}/payments`)
+// Pagina de pago de Stripe (Checkout); al terminar vuelve a la reserva
+export const redirectToCheckout = async (reservationId) => {
+  const { checkoutUrl } = await createPayment(reservationId)
+  window.location.href = checkoutUrl
+}
 
 export const captureDeposit = (paymentId, amountToCapture) =>
   http.post(`/payments/${paymentId}/capture-deposit`, amountToCapture ? { amountToCapture: Number(amountToCapture) } : {})

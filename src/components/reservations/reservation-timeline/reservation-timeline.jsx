@@ -1,45 +1,9 @@
-import { useFetch } from '../../../hooks'
-import { getPayment, listContracts, listVerifications } from '../../../services'
+import { buildSteps } from '../../../lib/reservation-flow'
 import { cn } from '../../../lib/cn'
 import { Card, Icon } from '../../ui'
 
-const FINAL_DEPOSIT_STATUSES = ['released', 'captured', 'canceled']
-
-// 404 en el pago no es un error
-const fetchProgress = async (reservationId) => {
-  const [contracts, payment, verifications] = await Promise.all([
-    listContracts(reservationId).catch(() => []),
-    getPayment(reservationId).catch(() => null),
-    listVerifications(reservationId).catch(() => []),
-  ])
-  return { contracts, payment, verifications }
-}
-
-// Pasos segun estado, contratos, pago y verificaciones
-function buildSteps(reservation, { contracts, payment, verifications }) {
-  const rental = contracts.find((contract) => contract.contract_type === 'rental')
-  const has = (type) => verifications.some((verification) => verification.verification_type === type)
-  const accepted = ['confirmed', 'completed'].includes(reservation.status)
-
-  return [
-    { label: 'Solicitada', icon: 'send', done: true },
-    { label: 'Aceptada', icon: 'thumb_up', done: accepted },
-    { label: 'Contrato firmado', icon: 'contract_edit', done: Boolean(rental?.guest_signed_at && rental?.owner_signed_at) },
-    { label: 'Pagada', icon: 'payments', done: payment?.rent_status === 'succeeded' },
-    { label: 'Check-in', icon: 'login', done: has('check_in') },
-    { label: 'Check-out', icon: 'logout', done: has('check_out') },
-    {
-      label: 'Finalizada',
-      icon: 'verified',
-      done: reservation.status === 'completed' && FINAL_DEPOSIT_STATUSES.includes(payment?.deposit_status),
-    },
-  ]
-}
-
-// Linea de tiempo, refreshKey fuerza el recalculo
-function ReservationTimeline({ reservation, refreshKey = 0 }) {
-  const { data } = useFetch(() => fetchProgress(reservation.id), [reservation.id, reservation.status, refreshKey])
-
+// Linea de tiempo del alquiler, flow viene de getFlow
+function ReservationTimeline({ reservation, flow }) {
   if (['rejected', 'cancelled'].includes(reservation.status)) {
     return (
       <Card>
@@ -51,12 +15,12 @@ function ReservationTimeline({ reservation, refreshKey = 0 }) {
     )
   }
 
-  const steps = buildSteps(reservation, data || { contracts: [], payment: null, verifications: [] })
+  const steps = buildSteps(reservation, flow)
   const current = steps.findIndex((step) => !step.done)
 
   return (
     <Card padded={false} className="overflow-x-auto px-4 py-5 scrollbar-none sm:px-6">
-      <ol className="flex min-w-[40rem] items-start">
+      <ol className="flex min-w-[48rem] items-start">
         {steps.map((step, index) => {
           const isCurrent = index === current
           return (

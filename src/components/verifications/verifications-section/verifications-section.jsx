@@ -5,7 +5,9 @@ import { Alert, AsyncContent, Button, Card, ConfirmButton } from '../../ui'
 import VerificationCard from '../verification-card/verification-card'
 
 // Check-in y check-out, el check-out completa la reserva
-function VerificationsSection({ reservationId, userId, onReservationChange, onChange }) {
+// check-in: pago hecho y contrato de entrega firmado
+// check-out: acta de devolucion firmada
+function VerificationsSection({ reservationId, userId, flow, onReservationChange, onChange }) {
   const { data: verifications, loading, error, reload } = useFetch(
     () => listVerifications(reservationId),
     [reservationId],
@@ -13,6 +15,18 @@ function VerificationsSection({ reservationId, userId, onReservationChange, onCh
   const create = useAction((verificationType) => createVerification(reservationId, { verificationType }))
 
   const byType = Object.fromEntries((verifications || []).map((v) => [v.verification_type, v]))
+
+  // motivo por el que aun no se puede iniciar
+  const lockReason = (type) => {
+    if (type === 'check_in') {
+      if (!flow.paid) return 'Primero hay que completar el pago.'
+      if (!flow.rentalSigned) return 'Primero ambas partes deben firmar el contrato de entrega.'
+      return null
+    }
+    if (!byType.check_in) return 'Primero hay que hacer el check-in.'
+    if (!flow.returnSigned) return 'Primero ambas partes deben firmar el acta de devolución.'
+    return null
+  }
 
   const handleCreate = async (type) => {
     const { ok, error: createError } = await create.run(type)
@@ -23,7 +37,11 @@ function VerificationsSection({ reservationId, userId, onReservationChange, onCh
   }
 
   return (
-    <Card icon="photo_camera" title="Check-in y check-out" subtitle="Las dos partes suben fotos al mismo registro. Cada una solo puede borrar las suyas.">
+    <Card
+      icon="photo_camera"
+      title="Check-in y check-out"
+      subtitle="Check-in al entregar el objeto y check-out al devolverlo. Las dos partes suben fotos al mismo registro y cada una solo puede borrar las suyas."
+    >
       <AsyncContent loading={loading} error={error} data={verifications} onRetry={reload}>
         {() => (
           <div className="flex flex-col gap-4">
@@ -31,7 +49,7 @@ function VerificationsSection({ reservationId, userId, onReservationChange, onCh
               const verification = byType[type]
               if (verification) return <VerificationCard key={type} verification={verification} userId={userId} />
 
-              const blocked = type === 'check_out' && !byType.check_in
+              const blocked = lockReason(type)
               return (
                 <div
                   key={type}
@@ -39,14 +57,12 @@ function VerificationsSection({ reservationId, userId, onReservationChange, onCh
                 >
                   <div>
                     <p className="font-bold">{label}</p>
-                    <p className="text-sm text-fg-muted">
-                      {blocked ? 'Primero hay que hacer el check-in.' : 'Aún no se ha iniciado.'}
-                    </p>
+                    <p className="text-sm text-fg-muted">{blocked || 'Aún no se ha iniciado.'}</p>
                   </div>
                   {type === 'check_out' ? (
                     <ConfirmButton
                       size="sm"
-                      disabled={blocked}
+                      disabled={Boolean(blocked)}
                       title="¿Iniciar el check-out?"
                       message="Al crear el check-out la reserva pasa a completada."
                       confirmLabel="Iniciar check-out"
@@ -55,7 +71,13 @@ function VerificationsSection({ reservationId, userId, onReservationChange, onCh
                       Iniciar
                     </ConfirmButton>
                   ) : (
-                    <Button size="sm" variant="secondary" loading={create.loading} onClick={() => handleCreate(type).catch(() => {})}>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      disabled={Boolean(blocked)}
+                      loading={create.loading}
+                      onClick={() => handleCreate(type).catch(() => {})}
+                    >
                       Iniciar
                     </Button>
                   )}
